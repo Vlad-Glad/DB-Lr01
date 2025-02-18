@@ -1,0 +1,68 @@
+# Ignore Visual Studio specific files
+.vscode/
+.vs/
+*.vcxproj.user
+*.vcxproj.filters
+*.vcxproj.*.user
+*.suo
+*.ncb
+*.sdf
+*.cache
+*.pdb
+*.ipch
+*.tlog/
+*.log
+
+# Ignore build directories
+x64/
+x86/
+ARM/
+ARM64/
+[Oo]ut/
+[Bb]in/
+[Dd]ebug/
+[Rr]elease/
+ipch/
+*.ilk
+*.obj
+*.pch
+*.res
+*.idb
+*.manifest
+*.tlog
+
+# Ignore CMake and Ninja build artifacts
+CMakeCache.txt
+CMakeFiles/
+CMakeScripts/
+cmake_install.cmake
+CMakeUserPresets.json
+compile_commands.json
+build/
+Makefile
+CTestTestfile.cmake
+
+# Ignore generated files
+*.exe
+*.dll
+*.lib
+*.exp
+*.iobj
+*.ipdb
+
+# Ignore NuGet packages
+*.nupkg
+packages/
+project.lock.json
+project.assets.json
+
+# Ignore temporary files
+*.tmp
+*.log
+*.dmp
+*.bak
+
+# Ignore user-specific files
+*.opendb
+*.VC.db
+*.tlog
