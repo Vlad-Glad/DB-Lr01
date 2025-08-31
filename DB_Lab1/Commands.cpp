@@ -357,15 +357,19 @@ void deleteMovie(int movieID) {
         fileDirFL.read(reinterpret_cast<char*>(&director), sizeof(Director));
 
         if (director.firstMovieId == movieID) {
-            if (movie.nextMoviePos == -1) {
-                director.firstMovieId = -1;  
-            }
-            else {
+            while (movie.nextMoviePos != -1) {
                 fileMovFL.seekg(movie.nextMoviePos);
                 Movie nextMovie;
                 fileMovFL.read(reinterpret_cast<char*>(&nextMovie), sizeof(Movie));
 
-                director.firstMovieId = nextMovie.movieID; 
+                if (!nextMovie.isDeleted) {
+                    director.firstMovieId = nextMovie.movieID;
+                    break;
+                }
+                movie.nextMoviePos = nextMovie.nextMoviePos;
+            }
+            if (movie.nextMoviePos == -1) {
+                director.firstMovieId = -1;
             }
         }
         if (director.lastMovieId == movieID) {
@@ -630,6 +634,20 @@ void insertMovie(const Movie& movie) {
     fileDirFL.seekp(dirPos);
     fileDirFL.write(reinterpret_cast<const char*>(&director), sizeof(Director));
 
+
+    if (newMovie.nextMoviePos != -1) {
+        fileMovFL.seekg(newMovie.nextMoviePos);
+        Movie nextMovie;
+        fileMovFL.read(reinterpret_cast<char*>(&nextMovie), sizeof(Movie));
+
+        if (nextMovie.prevMoviePos == pos) {
+            nextMovie.prevMoviePos = pos;
+
+            fileMovFL.seekp(newMovie.nextMoviePos);
+            fileMovFL.write(reinterpret_cast<const char*>(&nextMovie), sizeof(Movie));
+        }
+    }
+
     fileMovFL.close();
     fileDirFL.close();
     cout << "Movie inserted successfully!"<< endl;
@@ -685,7 +703,6 @@ void printAllMovies() {
 // Service functions
 
 void initializeFiles() {
-    // Масив імен файлів
     const char* files[] = {
         "Movie.fl", "Director.fl",
         "Movie.ind", "Director.ind",
